@@ -1,6 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-app=FastAPI(title='How Long Ago')
+from contextlib import asynccontextmanager
+from core.db import create_tables
+from models.event import Event
+from models.user import User
+
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    print('app start up ')
+    await create_tables()
+    yield
+    print('app shut down ')
+
+
+app=FastAPI(title='How Long Ago',lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
