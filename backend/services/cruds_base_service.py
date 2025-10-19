@@ -2,7 +2,7 @@
 from typing import TypeVar,Generic,List,Type
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select,update
+from sqlalchemy import select,update,func
 from pydantic import BaseModel
 import uuid
 CreateSchemaType=TypeVar("CreateSchemaType",bound=BaseModel)
@@ -36,10 +36,18 @@ class CrudsBaseService(Generic[ModelType,CreateSchemaType,PatchSchemaType]):
         return None
 
     async def read_all(self,limit:int,offset:int,db:AsyncSession)->List[ModelType]:
+        total_stmt=select(func.count()).select_from(self.model)
+        total_result=await db.execute(total_stmt)
+        total= total_result.scalar_one()
         stmt=select(self.model).offset(offset).limit(limit)
         result= await db.execute(stmt)
         items=result.scalars().all()
-        return items
+        return  {
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "items": items
+    }
     async def patch_by_id(self,id:uuid.UUID,data:PatchSchemaType,db:AsyncSession)->ModelType|None:
         obj= await db.get(self.model,id)
         if obj :
