@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from core.db import create_tables
 from models.event import Event
 from models.user import User
-from routes import user
+from routes import user,event
 @asynccontextmanager
 async def lifespan(app:FastAPI):
     print('app start up ')
@@ -28,3 +28,4 @@ def root():
     return {"message": "Welcome to How Long Ago API!"}
 
 app.include_router(user.router)
+app.include_router(event.router)

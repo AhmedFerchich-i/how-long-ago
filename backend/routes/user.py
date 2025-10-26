@@ -8,7 +8,7 @@ from models.user import User
 router=APIRouter(prefix='/users')
 
 @router.get('/',response_model=GetUsersResponseSchema[User, CreateUserSchema, PatchUserSchema])
-async def get_all_users(limit:int,offset:int,db=Depends(get_db),service:CrudsBaseService=Depends(get_user_crud_service)):
+async def get_all_users(limit:int=10,offset:int=0,db=Depends(get_db),service:CrudsBaseService=Depends(get_user_crud_service)):
     response= await service.read_all(limit,offset,db=db)
     return response
 

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 import uuid
 from typing import Optional,List
-
+from datetime import datetime
 class CreateUserSchema(BaseModel):
     name:str
     email:str
@@ -10,6 +10,10 @@ class ReadUserSchema(BaseModel):
     id:uuid.UUID
     name:str
     email:str
+    created_at:datetime
+    updated_at:datetime
+    class Config:
+        from_attributes=True
 
 
 class PatchUserSchema(BaseModel):
