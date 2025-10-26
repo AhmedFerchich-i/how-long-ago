@@ -35,4 +35,4 @@ class PatchEventSchema(BaseModel):
 class GetEventsSchema(BaseModel):
     offset: int
     total: int
-    events: List[ReadEventSchema]
+    items: List[ReadEventSchema]

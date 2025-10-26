@@ -11,6 +11,8 @@ psycopg-binary = "*"
 sqlalchemy = "*"
 pydantic-settings = "*"
 asyncpg = "*"
+bcrypt = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
 
 [dev-packages]
 

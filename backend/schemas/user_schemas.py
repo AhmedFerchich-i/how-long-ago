@@ -5,6 +5,8 @@ from datetime import datetime
 class CreateUserSchema(BaseModel):
     name:str
     email:str
+    password:str
+    
 
 class ReadUserSchema(BaseModel):
     id:uuid.UUID
@@ -19,6 +21,7 @@ class ReadUserSchema(BaseModel):
 class PatchUserSchema(BaseModel):
     name:Optional[str]=None
     email:Optional[str]=None
+    password:Optional[str]=None
 
 class GetUsersResponseSchema(BaseModel):
     offset:int

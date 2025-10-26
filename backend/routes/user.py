@@ -5,9 +5,10 @@ from schemas.user_schemas import GetUsersResponseSchema,ReadUserSchema,CreateUse
 from services.cruds_base_service import CrudsBaseService
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.user import User
+from utils.password import hash_password
 router=APIRouter(prefix='/users')
 
-@router.get('/',response_model=GetUsersResponseSchema[User, CreateUserSchema, PatchUserSchema])
+@router.get('/',response_model=GetUsersResponseSchema)
 async def get_all_users(limit:int=10,offset:int=0,db=Depends(get_db),service:CrudsBaseService=Depends(get_user_crud_service)):
     response= await service.read_all(limit,offset,db=db)
     return response
@@ -33,6 +34,7 @@ async def create_user(
     service: CrudsBaseService[User, CreateUserSchema, PatchUserSchema] = Depends(get_user_crud_service)
 ):
     """Create a new user"""
+    data.password=hash_password(data.password)
     user = await service.create(data, db)
     return user
 

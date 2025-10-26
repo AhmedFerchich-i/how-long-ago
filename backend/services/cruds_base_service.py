@@ -51,7 +51,8 @@ class CrudsBaseService(Generic[ModelType,CreateSchemaType,PatchSchemaType]):
     async def patch_by_id(self,id:uuid.UUID,data:PatchSchemaType,db:AsyncSession)->ModelType|None:
         obj= await db.get(self.model,id)
         if obj :
-           stmt=update(self.model).where(self.model.id==id).values(**data.model_dump())
+           
+           stmt=update(self.model).where(self.model.id==id).values(**data.model_dump(exclude_unset=True))
            await db.execute(stmt)
            await db.commit()
            await db.refresh(obj)
